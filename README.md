@@ -58,6 +58,22 @@ or set `CLAP_PATH` to its folder. Then rescan plugins in a CLAP-capable host
   they are alpha-blended in; otherwise a generated knob is drawn. The knob
   updates the gain and the host is notified (see params below).
 
+## Wrappers (more formats)
+`build_all.bat` has a `:wrap` stage that uses
+[clap-wrapper](https://github.com/free-audio/clap-wrapper) to turn the CLAP into
+a **VST3**. It auto-uses a `deps/` checkout if present, otherwise it skips
+cleanly. To build the Windows VST3 it needs (already cloned into `deps/` here):
+- `deps/clap-wrapper`, `deps/clap` (CLAP SDK), `deps/vst3sdk` (VST3 SDK **3.7.x** —
+  3.8.x fails on GCC with an ambiguous `iid`), and `cmake` + Ninja + a C++ compiler.
+
+The Windows VST3 is produced as `dist/win64/clap_skeleton.vst3` and copied to
+`Deploy/`. Notes:
+- Wrappers are **platform-native**: this builds the **Windows VST3**. Build the
+  **macOS AU/VST3** and **Linux VST3** with the same clap-wrapper command on
+  those OSes (CMake can't cross-build them from Windows).
+- **AUv2** is optional: add `-DCLAP_WRAPPER_BUILD_AUV2=ON` + an `AudioUnitSDK`.
+- **AAX** is intentionally not supported. **LV2** is not a clap-wrapper target.
+
 ## Platform status
 - **Windows (win64):** builds via `build_all.bat`, `clap_entry` exported (`.clap` = the DLL). Compile-verified.
 - **Linux (x64):** builds via `build_all.bat`, `clap_entry` in the ELF `.dynsym`

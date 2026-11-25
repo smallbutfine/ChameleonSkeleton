@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChameleonSkeleton — A CLAP Audio Plugin Skeleton in FreePascal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>CHAMELEON<span class="accent">SKELETON</span></h1>
+    <p class="subtitle">A minimal, multi-format audio plugin skeleton written in FreePascal</p>
+    <p class="tagline">CLAP first. VST3 via clap-wrapper. Bitmap GUI. No C++ required for your DSP.</p>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#formats">Formats</a>
+      <a href="#features">Features</a>
+      <a href="#build">Build</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<section id="overview">
+  <div class="container">
+    <h2>What It Is</h2>
+    <p>ChameleonSkeleton is a working <strong>CLAP</strong> audio-effect plugin written entirely in
+    FreePascal/Lazarus. It is a channelstrip-style skeleton: one automatable <em>Gain</em> parameter,
+    a bitmap-based GUI, and session state — wired to a passthrough DSP you replace with your own.</p>
+    <p>The plugin is built as a plain library (a <code>.clap</code> on Windows/Linux, a <code>.clap</code>
+    bundle on macOS) and can be wrapped into <strong>VST3</strong> with
+    <a href="https://github.com/free-audio/clap-wrapper">clap-wrapper</a>. Your DSP stays in Pascal;
+    the format/GUI shell is handled by the build.</p>
+
+    <div class="note">
+      <strong>Why CLAP first?</strong> CLAP is a modern, open (MIT) plugin ABI with a clean C interface.
+      One CLAP build + clap-wrapper yields VST3 (and AUv2 if you add the Apple SDK) — the widest reach
+      for the least work.
+    </div>
+  </div>
+</section>
+
+<section id="formats">
+  <div class="container">
+    <h2>Formats</h2>
+    <table>
+      <thead><tr><th>Format</th><th>Platform</th><th>How it is produced</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CLAP</strong></td><td>Windows / Linux / macOS</td><td>Native FreePascal build (<code>clap_skeleton.clap</code>)</td></tr>
+        <tr><td><strong>VST3</strong></td><td>Windows (native) / Linux / macOS</td><td><code>clap-wrapper</code> (built natively per OS)</td></tr>
+        <tr><td><strong>AUv2</strong></td><td>macOS (optional)</td><td><code>clap-wrapper</code> + <code>AudioUnitSDK</code></td></tr>
+      </tbody>
+    </table>
+    <p>AAX is intentionally not supported. LV2 is not a clap-wrapper target.</p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <h2>Features</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>CLAP Params</h3>
+        <p>One automatable <em>Gain</em> parameter with <code>count / get_info / get_value /
+        value_to_text / text_to_value / flush</code>. GUI edits notify the host via
+        <code>request_callback</code> → <code>on_main_thread</code> → <code>PARAM_VALUE</code> events.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Bitmap GUI</h3>
+        <p>Native embedded window: Win32 (GDI), Linux (X11), macOS (Cocoa NSView). Loads
+        <code>background.png</code> / <code>knob.png</code> if present, otherwise draws a generated knob.</p>
+      </div>
+      <div class="feature-card">
+        <h3>State</h3>
+        <p><code>clap.state</code> save/load persists the gain and window size (24-byte versioned
+        record) so sessions and presets recall the knob.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Pascal DSP</h3>
+        <p>Your DSP lives in <code>plugin_process</code>. The format and GUI shell is C ABI glue —
+        no C++ needed for the audio path.</p>
+      </div>
+      <div class="feature-card">
+        <h3>One Build</h3>
+        <p><code>build_all.bat</code> builds CLAP for win64/linux-x64/macos-intel/macos-aarch64,
+        stages <code>dist/</code>, copies version-stamped artifacts to <code>Deploy/</code>, and
+        builds the Windows VST3 via clap-wrapper.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Open &amp; Forkable</h3>
+        <p>MIT-licensed sources. Fork it, drop in your DSP and artwork, and ship your own plugin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="build">
+  <div class="container">
+    <h2>Build</h2>
+    <p>Requirements: FreePascal (FPC) with cross-compilers, CMake + Ninja + a C++ compiler (for the
+    VST3 wrapper), and the SDKs cloned into <code>deps/</code>.</p>
+    <pre>./build_all.bat            # all targets + Deploy/ + Windows VST3
+./build_all.bat --check    # verify the toolchain only
+NO_VERSION_BUMP=1 ./build_all.bat   # keep the current version</pre>
+    <p>See the <a href="docs.html">documentation</a> for the full layout, parameters, GUI, and state
+    format.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>ChameleonSkeleton — a CLAP audio plugin skeleton in FreePascal.</p>
+    <p>
+      <a href="https://github.com/smallbutfine/ChameleonSkeleton">GitHub</a> ·
+      <a href="https://github.com/smallbutfine/ChameleonSkeleton/releases">Releases</a> ·
+      <a href="https://github.com/free-audio/clap">CLAP</a> ·
+      <a href="https://github.com/free-audio/clap-wrapper">clap-wrapper</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

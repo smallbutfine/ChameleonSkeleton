@@ -1,6 +1,7 @@
 # Build output
 dist/
 Deploy/
+deps/
 
 # Compiler / linker clutter
 *.o

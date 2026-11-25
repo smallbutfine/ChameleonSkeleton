@@ -11,6 +11,7 @@ REM Targets: win64, linux-x64, linux-arm, macos-intel, macos-aarch64
 REM ============================================================
 
 set "ROOT=%CD%"
+set "ORIG_PATH=%PATH%"
 
 REM --- Toolchain paths (override via environment variables if needed) ---
 if not defined FPC_DIR set "FPC_DIR=C:\fpcupdeluxe\fpc\bin\i386-win32"
@@ -66,6 +67,8 @@ call :do_target "macos-intel"  "darwin" "x86_64"  ""           "-XPx86_64-apple-
 call :do_target "macos-aarch64" "darwin" "aarch64" ""          "-XPaarch64-apple-darwin19-"
 
 call :deploy
+
+call :wrap
 
 echo.
 echo ==================================================
@@ -213,6 +216,48 @@ if exist "%OUT_ROOT%\macos-aarch64\%LIB_NAME%.clap" (
     python "%ROOT%\tools\zip_app.py" "%OUT_ROOT%\macos-aarch64\%LIB_NAME%.clap" "%ROOT%\Deploy\!LIB_NAME!-!DETECTED_VERSION!-macos-aarch64.zip"
     echo   OK: !LIB_NAME!-!DETECTED_VERSION!-macos-aarch64.zip
 )
+exit /b 0
+
+REM ============================================================
+REM :wrap - OPTIONAL: build a native VST3 from the CLAP via clap-wrapper.
+REM Skips cleanly unless all of these are set/present:
+REM   CLAP_WRAPPER_DIR  - path to a clap-wrapper checkout (has CMakeLists.txt)
+REM   CLAP_SDK_ROOT     - path to the CLAP SDK
+REM   VST3_SDK_ROOT     - path to the VST3 SDK
+REM   cmake             - on PATH
+REM macOS AU / Linux VST3 must be built with the same command on those OSes.
+REM AAX needs the Avid AAX SDK + PACE signing (not handled here).
+REM ============================================================
+:wrap
+echo.
+echo [Wrap] clap-wrapper (native VST3)...
+set "PATH=%ORIG_PATH%"
+for /f "delims=" %%G in ('where gcc') do set "NATIVE_CC=%%G"
+for /f "delims=" %%G in ('where g++') do set "NATIVE_CXX=%%G"
+if not defined CLAP_WRAPPER_DIR set "CLAP_WRAPPER_DIR=%ROOT%\deps\clap-wrapper"
+if not defined CLAP_SDK_ROOT set "CLAP_SDK_ROOT=%ROOT%\deps\clap"
+if not defined VST3_SDK_ROOT set "VST3_SDK_ROOT=%ROOT%\deps\vst3sdk"
+if not exist "%CLAP_WRAPPER_DIR%\CMakeLists.txt" ( echo   SKIP: clap-wrapper not found ^(clone into deps\ or set CLAP_WRAPPER_DIR^) & exit /b 0 )
+where cmake >nul 2>&1
+if errorlevel 1 ( echo   SKIP: cmake not found & exit /b 0 )
+
+set "WRAP_BUILD=%OUT_ROOT%\wrapper"
+if exist "!WRAP_BUILD!" rmdir /s /q "!WRAP_BUILD!"
+cmake -B "!WRAP_BUILD!" -S "%CLAP_WRAPPER_DIR%" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-Wno-deprecated-declarations -DCMAKE_C_COMPILER="!NATIVE_CC!" -DCMAKE_CXX_COMPILER="!NATIVE_CXX!" -DCLAP_SDK_ROOT="%CLAP_SDK_ROOT%" -DVST3_SDK_ROOT="%VST3_SDK_ROOT%" -DCLAP_WRAPPER_OUTPUT_NAME="clap_skeleton"
+if errorlevel 1 ( echo   ERROR: cmake configure failed & exit /b 1 )
+cmake --build "!WRAP_BUILD!"
+if errorlevel 1 ( echo   ERROR: wrapper build failed & exit /b 1 )
+
+set "VST3_FOUND="
+for /r "!WRAP_BUILD!" %%F in (*.vst3) do set "VST3_FOUND=%%F"
+if not defined VST3_FOUND ( echo   WARNING: no .vst3 produced & exit /b 0 )
+if not exist "%OUT_ROOT%\win64" mkdir "%OUT_ROOT%\win64"
+copy /y "!VST3_FOUND!" "%OUT_ROOT%\win64\clap_skeleton.vst3" >nul
+if errorlevel 1 ( echo   ERROR: failed to stage VST3 from "!VST3_FOUND!" & exit /b 1 )
+echo   OK: win64 VST3
+if not exist "%ROOT%\Deploy" mkdir "%ROOT%\Deploy"
+copy /y "%OUT_ROOT%\win64\clap_skeleton.vst3" "%ROOT%\Deploy\!LIB_NAME!-!DETECTED_VERSION!-win64.vst3" >nul
+echo   OK: Deploy VST3
 exit /b 0
 
 REM ============================================================
