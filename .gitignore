@@ -1,0 +1,12 @@
+# Build output
+dist/
+Deploy/
+
+# Compiler / linker clutter
+*.o
+*.ppu
+*.a
+*.so
+*.dll
+*.dylib
+*.res
