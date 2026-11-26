@@ -58,6 +58,16 @@ or set `CLAP_PATH` to its folder. Then rescan plugins in a CLAP-capable host
   they are alpha-blended in; otherwise a generated knob is drawn. The knob
   updates the gain and the host is notified (see params below).
 
+## Linux build (native, recommended)
+The Windows cross-linker can't link a Linux `.so` on this host (the fpcupdeluxe
+Linux sysroot lacks `ld-linux`, and `ppcross -k--sysroot` isn't applied). Build
+natively on Linux/WSL instead (needs `fpc`):
+```
+./build_linux.sh      # -> clap_skeleton.clap
+```
+The code is platform-independent and already compiles via the cross, so native
+`fpc` produces the same `.so` with `clap_entry` exported.
+
 ## Wrappers (more formats)
 `build_all.bat` has a `:wrap` stage that uses
 [clap-wrapper](https://github.com/free-audio/clap-wrapper) to turn the CLAP into
