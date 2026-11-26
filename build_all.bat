@@ -112,7 +112,7 @@ if "%T_OS%"=="win64" (
     ) else (
         set "CC=%FPC_DIR%\ppcross%T_CPU%.exe"
     )
-    set "CC_FLAGS=-T%T_OS% -P%T_CPU% -O2 %XP_PREFIX% %EXTRA_FLAGS%"
+    set "CC_FLAGS=-T%T_OS% -P%T_CPU% -O2 -Mdelphi %XP_PREFIX% %EXTRA_FLAGS%"
     if "%T_OS%"=="darwin" set "PATH=%CROSS_BIN_DIR%\all-apple\bin;%PATH%"
     if "%T_OS%"=="linux" set "PATH=%CROSS_BIN_DIR%\%T_OS%-%T_CPU%;%PATH%"
 )
