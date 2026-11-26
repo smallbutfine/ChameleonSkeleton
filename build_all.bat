@@ -18,6 +18,7 @@ if not defined FPC_DIR set "FPC_DIR=C:\fpcupdeluxe\fpc\bin\i386-win32"
 if not defined CROSS_BIN_DIR set "CROSS_BIN_DIR=C:\fpcupdeluxe\cross\bin"
 set "FPC=%FPC_DIR%\fpc.exe"
 set "OUT_ROOT=%ROOT%\dist"
+if not defined ISCC set "ISCC=C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
 
 REM --- Project name from NAME file (fallback to clap_skeleton) ---
 set "LIB_NAME=clap_skeleton"
@@ -136,6 +137,9 @@ if "%T_OS%"=="darwin" (
 ) else (
     call :package_clap_flat "%T_NAME%"
 )
+if errorlevel 1 goto :target_failed
+
+if "%T_OS%"=="win64" call :package_win "%T_NAME%"
 if errorlevel 1 goto :target_failed
 
 echo [%T_NAME%] complete.
@@ -258,6 +262,26 @@ echo   OK: win64 VST3
 if not exist "%ROOT%\Deploy" mkdir "%ROOT%\Deploy"
 copy /y "%OUT_ROOT%\win64\clap_skeleton.vst3" "%ROOT%\Deploy\!LIB_NAME!-!DETECTED_VERSION!-win64.vst3" >nul
 echo   OK: Deploy VST3
+exit /b 0
+
+REM ============================================================
+:package_win
+set "TD=%OUT_ROOT%\%~1"
+if not exist "%ISCC%" ( echo   SKIP: Inno Setup not found & exit /b 0 )
+if not exist "%TD%\%LIB_NAME%.clap" ( echo   SKIP: no .clap for installer & exit /b 0 )
+copy /y "%TD%\%LIB_NAME%.clap" "%ROOT%\%LIB_NAME%.clap" >nul 2>&1
+pushd "%ROOT%\installer"
+if errorlevel 1 ( echo   ERROR: no installer dir & exit /b 1 )
+"%ISCC%" /Q /dMyAppVersion="!DETECTED_VERSION!" installer.iss
+if errorlevel 1 ( popd & exit /b 1 )
+popd
+if exist "%ROOT%\ChameleonSkeleton_Setup_!DETECTED_VERSION!.exe" (
+    if not exist "%ROOT%\Deploy" mkdir "%ROOT%\Deploy"
+    copy /y "%ROOT%\ChameleonSkeleton_Setup_!DETECTED_VERSION!.exe" "%ROOT%\Deploy\ChameleonSkeleton_Setup_!DETECTED_VERSION!.exe" >nul
+    del /q "%ROOT%\ChameleonSkeleton_Setup_!DETECTED_VERSION!.exe" 2>nul
+    del /q "%ROOT%\%LIB_NAME%.clap" 2>nul
+    echo   OK: ChameleonSkeleton Setup
+)
 exit /b 0
 
 REM ============================================================
