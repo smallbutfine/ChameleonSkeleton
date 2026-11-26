@@ -100,8 +100,8 @@ echo ==================================================
 
 REM --- Select compiler ---
 if "%T_OS%"=="win64" (
-    set "CC=%FPC%"
-    set "CC_FLAGS=-O2"
+    set "CC=%FPC_DIR%\ppcrossx64.exe"
+    set "CC_FLAGS=-Twin64 -Px86_64 -O2"
 ) else (
     if "%T_CPU%"=="x86_64" (
         set "CC=%FPC_DIR%\ppcrossx64.exe"
