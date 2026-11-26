@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChameleonSkeleton — Ein CLAP-Audio-Plugin-Skelett in FreePascal</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.crossbar { background:#0d1117; border-bottom:1px solid #30363d; padding:10px 20px; text-align:center; font-size:0.85em; letter-spacing:0.5px; }
+.crossbar a { color:#8b949e; text-decoration:none; padding:4px 10px; transition:color 0.2s; font-weight:500; }
+.crossbar a:hover { color:#58a6ff; }
+.crossbar-sep { color:#30363d; margin:0 6px; }
+</style>
+</head>
+<body>
+<div class="crossbar">
+  <a href="https://smallbutfine.github.io/ChameleonTools/">ChameleonTools</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/ChameleonDrummer/">Drummer</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/TaraDSP/">TaraDSP</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/stringselectorapp/">StringSelector</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/ChameleonRecorder/">Recorder</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/ChameleonSkeleton/">Skeleton</a>
+</div>
+
+<header>
+  <div class="container">
+    <h1><img src="../chameleon.jpg" alt="Chameleon" style="width:48px; height:48px; border-radius:50%; vertical-align:middle; margin-right:10px; border:2px solid #30363d;" /><span class="logo">◉</span> CHAMELEON<span class="accent">SKELETON</span></h1>
+    <p class="subtitle">Ein minimales Multi-Format-Audio-Plugin-Skelett in FreePascal</p>
+    <p class="tagline">CLAP zuerst. VST3 via clap-wrapper. Bitmap-GUI. Kein C++ für die DSP nötig.</p>
+    <nav>
+      <a href="index.html">Start</a> <a href="docs.html">Doku</a>
+      <span style="width:100%"></span>
+      <a href="../index.html">EN</a> <a href="de/index.html">DE</a> <a href="es/index.html">ES</a> <a href="fr/index.html">FR</a> <a href="pt/index.html">PT</a> <a href="ru/index.html">RU</a> <a href="zh/index.html">ZH</a>
+    </nav>
+  </div>
+</header>
+
+<section id="overview">
+  <div class="container">
+    <h2>Was es ist</h2>
+    <p>ChameleonSkeleton ist ein funktionierendes CLAP-Audio-Effekt-Plugin, komplett in FreePascal/Lazarus geschrieben. Es ist ein Kanalzug-Skelett: ein automatisierbarer Gain-Parameter, eine Bitmap-GUI und Session-State — verbunden mit einer Durchreich-DSP, die du durch deine eigene ersetzt.</p>
+    <p>Das Plugin wird als einfache Bibliothek gebaut (eine .clap unter Windows/Linux, ein .clap-Bundle unter macOS) und kann mit clap-wrapper in VST3 gewrappt werden. Deine DSP bleibt in Pascal; die Format-/GUI-Hülle übernimmt der Build.</p>
+    <div class="note"><strong>CLAP</strong> — CLAP zuerst. VST3 via clap-wrapper. Bitmap-GUI. Kein C++ für die DSP nötig.</div>
+  </div>
+</section>
+<section id="formats">
+  <div class="container">
+    <h2>Formate</h2>
+    <table>
+      <thead><tr><th>Format</th><th>Platform</th><th>Build</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CLAP</strong></td><td>Windows / Linux / macOS</td><td>Native FreePascal</td></tr>
+        <tr><td><strong>VST3</strong></td><td>Windows / Linux / macOS</td><td>clap-wrapper</td></tr>
+        <tr><td><strong>AUv2</strong></td><td>macOS (optional)</td><td>clap-wrapper + AudioUnitSDK</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="features">
+  <div class="container">
+    <h2>Funktionen</h2>
+    <div class="feature-grid">
+      <div class="feature-card"><h3>clap.params</h3><p>Gain (0..1)</p></div>
+      <div class="feature-card"><h3>clap.gui</h3><p>Win32 / X11 / Cocoa</p></div>
+      <div class="feature-card"><h3>clap.state</h3><p>Gain + formate</p></div>
+      <div class="feature-card"><h3>DSP</h3><p>Pascal</p></div>
+    </div>
+  </div>
+</section>
+<section id="build">
+  <div class="container">
+    <h2>Bauen</h2>
+    <p>Voraussetzungen: FreePascal (FPC) mit Cross-Compilern, CMake + Ninja + ein C++-Compiler (für den VST3-Wrapper) und die SDKs in deps/.</p>
+    <pre>./build_all.bat</pre>
+    <p><a href="docs.html">Dokumentation</a></p>
+  </div>
+</section>
+<footer>
+  <div class="container">
+    <p>ChameleonSkeleton — ein CLAP-Audio-Plugin-Skelett in FreePascal.</p>
+    <p><a href="../index.html">EN</a> · <a href="../index.html">EN</a> <a href="de/index.html">DE</a> <a href="es/index.html">ES</a> <a href="fr/index.html">FR</a> <a href="pt/index.html">PT</a> <a href="ru/index.html">RU</a> <a href="zh/index.html">ZH</a></p>
+  </div>
+</footer>
+</body>
+</html>

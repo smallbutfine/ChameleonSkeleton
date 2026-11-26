@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChameleonSkeleton — Un squelette de plugin audio CLAP en FreePascal</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.crossbar { background:#0d1117; border-bottom:1px solid #30363d; padding:10px 20px; text-align:center; font-size:0.85em; letter-spacing:0.5px; }
+.crossbar a { color:#8b949e; text-decoration:none; padding:4px 10px; transition:color 0.2s; font-weight:500; }
+.crossbar a:hover { color:#58a6ff; }
+.crossbar-sep { color:#30363d; margin:0 6px; }
+</style>
+</head>
+<body>
+<div class="crossbar">
+  <a href="https://smallbutfine.github.io/ChameleonTools/">ChameleonTools</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/ChameleonDrummer/">Drummer</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/TaraDSP/">TaraDSP</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/stringselectorapp/">StringSelector</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/ChameleonRecorder/">Recorder</a>
+  <span class="crossbar-sep">|</span>
+  <a href="https://smallbutfine.github.io/ChameleonSkeleton/">Skeleton</a>
+</div>
+
+<header>
+  <div class="container">
+    <h1><img src="../chameleon.jpg" alt="Chameleon" style="width:48px; height:48px; border-radius:50%; vertical-align:middle; margin-right:10px; border:2px solid #30363d;" /><span class="logo">◉</span> CHAMELEON<span class="accent">SKELETON</span></h1>
+    <p class="subtitle">Un squelette de plugin audio multi-format écrit en FreePascal</p>
+    <p class="tagline">CLAP d'abord. VST3 via clap-wrapper. GUI bitmap. Pas de C++ pour votre DSP.</p>
+    <nav>
+      <a href="index.html">Accueil</a> <a href="docs.html">Docs</a>
+      <span style="width:100%"></span>
+      <a href="../index.html">EN</a> <a href="de/index.html">DE</a> <a href="es/index.html">ES</a> <a href="fr/index.html">FR</a> <a href="pt/index.html">PT</a> <a href="ru/index.html">RU</a> <a href="zh/index.html">ZH</a>
+    </nav>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>Documentation</h2>
+    <h3>clap.params</h3>
+    <p>Gain — 0.0 .. 1.0 (default 0.5).</p>
+    <h3>clap.gui</h3>
+    <p>Win32 (GDI) / X11 / Cocoa NSView. PNG: background.png, knob.png.</p>
+    <h3>clap.state</h3>
+    <pre>'C''H''S''1' | version(2) | gain(double) | width(uint32) | height(uint32)</pre>
+    <h3>Compiler</h3>
+    <pre>./build_all.bat</pre>
+    <p>Prérequis : FreePascal (FPC) avec cross-compilateurs, CMake + Ninja + un compilateur C++ (pour le wrapper VST3) et les SDK dans deps/.</p>
+  </div>
+</section>
+<footer>
+  <div class="container">
+    <p>ChameleonSkeleton — un squelette de plugin audio CLAP en FreePascal.</p>
+    <p><a href="../index.html">EN</a> · <a href="../index.html">EN</a> <a href="de/index.html">DE</a> <a href="es/index.html">ES</a> <a href="fr/index.html">FR</a> <a href="pt/index.html">PT</a> <a href="ru/index.html">RU</a> <a href="zh/index.html">ZH</a></p>
+  </div>
+</footer>
+</body>
+</html>
